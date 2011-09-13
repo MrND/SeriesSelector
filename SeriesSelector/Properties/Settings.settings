@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SeriesSelector.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="MappingPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">E:\My Files\Dokumente\SeriesSelectorResources\Mappings.xml</Value>
+    </Setting>
+    <Setting Name="SourcePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">E:\My Files\Dokumente\DreamloadDownloads</Value>
+    </Setting>
+    <Setting Name="DestinationPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">L:\External Videos\Serien</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

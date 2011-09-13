@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="SeriesSelector.SeriesManagement.SeriesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="1200"
+             >
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <WrapPanel>
+                <TextBox Name="SourcePath" Text="{Binding SourcePath}"/>
+                <Button Name="ChooseSourcePath" Command="{Binding SelectFolder}" Content="Choose Folder..."/>
+                <Label Content="File Type"/>
+                <ComboBox ItemsSource="{Binding FileTypes}" DisplayMemberPath="Type" SelectedItem="{Binding SelectedFileType, Mode=TwoWay}"/>
+            </WrapPanel>
+            <ListView ItemsSource="{Binding FileList}" DisplayMemberPath="FullPath" SelectedItem="{Binding SelectedFile, Mode=TwoWay}" MaxHeight="650"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+            <WrapPanel>
+                <Label Content="Destination Path"/>
+                <TextBox Text="{Binding DestinationPath}"/>
+                <Button Command="{Binding SelectDestinationFolder}" Content="Choose Folder..."/>
+            </WrapPanel>
+            <ListView ItemsSource="{Binding NewFileList}" DisplayMemberPath="NewName" SelectedItem="{Binding SelectedFile, Mode=TwoWay}" MaxHeight="650"/>
+        </StackPanel>
+        <StackPanel Grid.Column="2">
+            <Label Content="Detailed Information"/>
+            <WrapPanel>
+                <Label Content="Name:"/>
+                <TextBox Text="{Binding Name}" Name="NameBox" MaxWidth="200" MinWidth="200" />
+                <Label Content="Season:"/>
+                <TextBox Text="{Binding Season}" Name="SeasonBox" MinWidth="40" MaxWidth="40"/>
+                <Label Content="Episode:"/>
+                <TextBox Text="{Binding Episode}" Name="EpisodeBox" MinWidth="40" MaxWidth="40"/>
+                <Label Content="ReleaseGroup:"/>
+                <TextBox Text="{Binding ReleaseGroup}" Name="ReleaseGroupBox" MinWidth="100" MaxWidth="100"/>
+                <Label Content="File Size:"/>
+                <TextBox Text="{Binding FileSize}" Name="FileSizeBox" MinWidth="60" MaxWidth="60"/>
+                <Label Content="File Type:"/>
+                <TextBox Text="{Binding FileType}" Name="FileTypeBox" MinWidth="40" MaxWidth="40"/>
+            </WrapPanel>
+            <WrapPanel>
+                <Label Content="Map To Series:"/>
+                <TextBox Text="{Binding NewName}" MinWidth="200" MaxWidth="200"/>
+            </WrapPanel>
+            <Label Content="Current Mappings:"/>
+            <ListView ItemsSource="{Binding CurrentMappings}" SelectedItem="{Binding SelectedMapping, Mode=TwoWay}" MaxHeight="400" Height="350" MinWidth="100">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="OldName" DisplayMemberBinding="{Binding Path=Key}" Width="auto"/>
+                        <GridViewColumn Header="NewName" DisplayMemberBinding="{Binding Path=Value}" Width="auto"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <WrapPanel>
+                <Button Content="Add Mapping" Command="{Binding AddMapping}" />
+                <Button Command="{Binding RemoveMapping}" Content="Remove Mapping"/>
+            </WrapPanel>
+            <WrapPanel>
+                <Button Command="{Binding MoveAllFiles}" Content="Move All Files"/>
+                <Button Command="{Binding MoveSelectedFile}" Content="Move Selected Files"/>
+            </WrapPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
