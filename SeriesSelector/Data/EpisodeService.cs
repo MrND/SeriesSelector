@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Data;
 using System.IO;
 using System.Text;
+using SeriesSelector.Properties;
 
 namespace SeriesSelector.Data
 {
@@ -97,7 +98,7 @@ namespace SeriesSelector.Data
             mappingTable.Columns.Add("OldName");
             mappingTable.Columns.Add("NewName");
             mappingsDs.Tables.Add(mappingTable);
-            mappingsDs.ReadXml(@"E:\My Files\Dokumente\SeriesSelectorResources\Mappings.xml");
+            mappingsDs.ReadXml(Settings.Default.MappingPath);
             var mappings = new Dictionary<string, string>();
 
             foreach (DataRow row in mappingTable.Rows)
@@ -119,7 +120,7 @@ namespace SeriesSelector.Data
             }
 
             mappings.Tables.Add(mappingTable);
-            mappings.WriteXml(@"E:\My Files\Dokumente\SeriesSelectorResources\Mappings.xml");
+            mappings.WriteXml(Settings.Default.MappingPath);
         }
     }
 }

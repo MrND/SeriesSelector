@@ -67,8 +67,8 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FolderPickerLib">
-      <HintPath>..\..\..\..\..\Downloads\FolderPickerLib.dll</HintPath>
+    <Reference Include="FolderPickerLib, Version=1.0.4099.42616, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\lib\FolderPickerLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />

@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeriesSelector", "SeriesSelector\SeriesSelector.csproj", "{16BB9BAA-AC92-4512-8EA5-AA51F5CF7B69}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lib", "lib", "{3232AF87-E920-4E05-94D2-ABBAA9F6BCEB}"
+	ProjectSection(SolutionItems) = preProject
+		lib\FolderPickerLib.dll = lib\FolderPickerLib.dll
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

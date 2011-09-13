@@ -25,7 +25,7 @@ namespace SeriesSelector.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("E:\\My Files\\Dokumente\\SeriesSelectorResources\\Mappings.xml")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\LordTakeshiXVII\\Documents\\seriesselectortestfiles\\mappings\\Mappings.xml")]
         public string MappingPath {
             get {
                 return ((string)(this["MappingPath"]));
@@ -34,7 +34,7 @@ namespace SeriesSelector.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("E:\\My Files\\Dokumente\\DreamloadDownloads")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\LordTakeshiXVII\\Documents\\seriesselectortestfiles\\source")]
         public string SourcePath {
             get {
                 return ((string)(this["SourcePath"]));
@@ -46,7 +46,7 @@ namespace SeriesSelector.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("L:\\External Videos\\Serien")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\LordTakeshiXVII\\Documents\\seriesselectortestfiles\\destination")]
         public string DestinationPath {
             get {
                 return ((string)(this["DestinationPath"]));
