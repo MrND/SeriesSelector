@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:SeriesManagement="clr-namespace:SeriesSelector.SeriesManagement" 
-        Title="MainWindow" Height="700" Width="700" Loaded="WindowLoaded">
+        Title="Series Selector" Height="700" Width="700" Loaded="WindowLoaded">
     <Window.Resources>
         <ResourceDictionary>
             <DataTemplate DataType="{x:Type SeriesManagement:SeriesViewModel}">
