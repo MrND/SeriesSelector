@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Data;
+using System.IO;
 using System.Windows;
+using SeriesSelector.Frame;
 using SeriesSelector.Properties;
 
 namespace SeriesSelector.Data
@@ -9,20 +11,24 @@ namespace SeriesSelector.Data
     [Export(typeof(IMappingService))]
     public class MappingService : IMappingService
     {
+
         
         public MappingService()
         {
             _mappingTable.Columns.Add("OldName");
             _mappingTable.Columns.Add("NewName");
         }
-
-        private DataSet _mappings;
         private DataTable _mappingTable;
 
         public Dictionary<string, string> GetMappingValues()
         {
-            _mappings.Tables.Add(_mappingTable);
-            _mappings.ReadXml(Settings.Default.MappingPath);
+            if (!File.Exists(Constants.MappingFilePath))
+            {
+                var d = new Dictionary<string, string>();
+                WriteMappingValue(d);
+            }
+            
+            _mappingTable.ReadXml(Constants.MappingFilePath);
             Dictionary<string, string> mappings = null;
 
             foreach (DataRow row in _mappingTable.Rows)
@@ -39,8 +45,7 @@ namespace SeriesSelector.Data
                 _mappingTable.Rows.Add(currentMapping.Key, currentMapping.Value);
             }
 
-            _mappings.Tables.Add(_mappingTable);
-            _mappings.WriteXml(Settings.Default.MappingPath);
+            _mappingTable.WriteXml(Constants.MappingFilePath);
         }
     }
 }

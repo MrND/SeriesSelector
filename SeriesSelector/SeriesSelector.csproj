@@ -94,10 +94,16 @@
     <Compile Include="Data\EpisodeType.cs" />
     <Compile Include="Data\FileTypeValue.cs" />
     <Compile Include="Data\IEpisdoeService.cs" />
+    <Compile Include="Data\IEpisodeChecker.cs" />
     <Compile Include="Data\IMappingService.cs" />
+    <Compile Include="Data\ISeriesMatcher.cs" />
     <Compile Include="Data\MappingService.cs" />
     <Compile Include="Data\MappingValue.cs" />
+    <Compile Include="Data\NameMatcher.cs" />
+    <Compile Include="Data\PatternMatcher.cs" />
+    <Compile Include="Data\SimpleEpisodeChecker.cs" />
     <Compile Include="Frame\AdhocCommand.cs" />
+    <Compile Include="Frame\Constants.cs" />
     <Compile Include="SeriesManagement\SeriesView.xaml.cs">
       <DependentUpon>SeriesView.xaml</DependentUpon>
     </Compile>

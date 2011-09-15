@@ -23,18 +23,9 @@ namespace SeriesSelector.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\LordTakeshiXVII\\Documents\\seriesselectortestfiles\\mappings\\Mappings.xml")]
-        public string MappingPath {
-            get {
-                return ((string)(this["MappingPath"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\LordTakeshiXVII\\Documents\\seriesselectortestfiles\\source")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\abo\\Desktop\\source")]
         public string SourcePath {
             get {
                 return ((string)(this["SourcePath"]));
@@ -46,7 +37,7 @@ namespace SeriesSelector.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\LordTakeshiXVII\\Documents\\seriesselectortestfiles\\destination")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\abo\\Desktop\\destination")]
         public string DestinationPath {
             get {
                 return ((string)(this["DestinationPath"]));
