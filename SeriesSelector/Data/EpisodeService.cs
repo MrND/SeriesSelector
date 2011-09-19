@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.Data;
 using System.IO;
 using System.Text;
-using SeriesSelector.Properties;
+using SeriesSelector.Frame;
 
 namespace SeriesSelector.Data
 {
@@ -14,91 +14,59 @@ namespace SeriesSelector.Data
         public IList<EpisodeType> GetSourceEpisode(string sourcePath, string fileType)
         {
             var di = Directory.GetFiles(sourcePath, fileType, SearchOption.AllDirectories);
-            
-            string[] fileArray;
 
-            char[] delimiter = "\\".ToCharArray();
-
-            var sb = new StringBuilder();
-            
             IList<EpisodeType> episode = new List<EpisodeType>();
 
             foreach (var file in di)
             {
                 var episodeType = new EpisodeType();
-                string seasonString = null;
-                string episodeString = null;
-                fileArray = file.Split(delimiter);
-                string fileName = fileArray.GetValue(fileArray.Length-1).ToString();
+                var fileName = Path.GetFileName(file);
 
-                string[] array = {fileName};
-                for (int i = 0; i < array.Length; i++)
+                if(string.IsNullOrEmpty(fileName))
+                    continue;
+
+                if(fileName.ToLower().Contains("sample"))
+                    continue;
+
+                var checker = BootStrapper.ResolveAll<IEpisodeChecker>();
+                Tuple<string, string> result = null;
+
+                foreach (var c in checker)
                 {
-                    sb.AppendLine();
-                    char[] chars = array[i].ToCharArray();
-                    for (int j = 0; j < chars.Length; j++)
-                    {
-                        if (chars[j] == 's' || chars[j] == 'S')
-                        {
-                            int number = 0;
-                            if (int.TryParse(chars[j + 1] + "" + chars[j + 2], out number))
-                            {
-                                string str = chars[j] + "" + chars[j + 1] + "" + chars[j + 2];
-                                seasonString = str;
-                            }
-                        }
-                    }
+                    result = c.CheckSeasonEpisode(fileName);
+                    if (result != null)
+                        break;
                 }
 
-                for (int i = 0; i < array.Length; i++)
-                {
-                    sb.AppendLine();
-                    char[] chars = array[i].ToCharArray();
-                    for (int j = 0; j < chars.Length; j++)
-                    {
-                        if (chars[j] == 'e' || chars[j] == 'E')
-                        {
-                            int number = 0;
-                            if (int.TryParse(chars[j + 1] + "" + chars[j + 2], out number))
-                            {
-                                string str = chars[j] + "" + chars[j + 1] + "" + chars[j + 2];
-                                episodeString = str;
-                            }
-                        }
-                    }
-                }
-                if (seasonString != null && episodeString!= null)
-                {
-                    string fName;
-                    int found1 = fileName.IndexOf(seasonString);
-                    fName = fileName.Remove(found1, 3);
+                if (result == null)
+                    continue;
+                var seasonString = result.Item1;
+                var episodeString = result.Item2;
 
-                    int found2 = fName.IndexOf(episodeString);
-                    fName = fName.Remove(found2, 3);
+                var fName = fileName.Replace(seasonString, "");
+                fName = fName.Replace(episodeString, "");
 
-                    int found3 = fName.IndexOf("sample");
-                    if (found3 <= 0)
-                    {
-                        episodeType.FileName = fName;
-                        episodeType.Season = seasonString;
-                        episodeType.Episode = episodeString;
-                        episodeType.FullPath = file;
+                episodeType.FileName = fName;
+                episodeType.Season = seasonString;
+                episodeType.Episode = episodeString;
+                episodeType.FullPath = file;
+                episodeType.FileSize = Math.Round((((double)new FileInfo(file).Length) / 1048576), 2).ToString();
 
-                        episode.Add(episodeType);
-                    }
-                }
+                episode.Add(episodeType);
             }
             return episode;
         }
 
         public Dictionary<string, string> GetMappingValues()
         {
-            var mappingsDs = new DataSet();
-            var mappingTable = new DataTable();
-            mappingTable.Columns.Add("OldName");
-            mappingTable.Columns.Add("NewName");
-            mappingsDs.Tables.Add(mappingTable);
-            mappingsDs.ReadXml(Settings.Default.MappingPath);
+            if (!File.Exists(Constants.MappingFilePath))
+            {
+                var d = new Dictionary<string, string>();
+                WriteMappingValue(d);
+            }
+
+            var mappingTable = CreateMappingTable();
+            mappingTable.ReadXml(Constants.MappingFilePath);
             var mappings = new Dictionary<string, string>();
 
             foreach (DataRow row in mappingTable.Rows)
@@ -110,17 +78,21 @@ namespace SeriesSelector.Data
 
         public void WriteMappingValue(Dictionary<string, string> currentMappings)
         {
-            var mappings = new DataSet();
-            var mappingTable = new DataTable();
-            mappingTable.Columns.Add("OldName");
-            mappingTable.Columns.Add("NewName");
+            var mappingTable = CreateMappingTable();
             foreach (var currentMapping in currentMappings)
             {
                 mappingTable.Rows.Add(currentMapping.Key, currentMapping.Value);
             }
 
-            mappings.Tables.Add(mappingTable);
-            mappings.WriteXml(Settings.Default.MappingPath);
+            mappingTable.WriteXml(Constants.MappingFilePath);
+        }
+
+        private DataTable CreateMappingTable()
+        {
+            var mappingTable = new DataTable("Mappings");
+            mappingTable.Columns.Add("OldName");
+            mappingTable.Columns.Add("NewName");
+            return mappingTable;
         }
     }
 }

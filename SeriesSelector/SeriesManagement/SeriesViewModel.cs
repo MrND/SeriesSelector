@@ -203,18 +203,23 @@ namespace SeriesSelector.SeriesManagement
             get
             {
                 _newFileList.Clear();
+                _currentMappings = _episodeService.GetMappingValues();
                 
                 foreach (var episodeType in _fileList)
                 {
-                    string newName;
-                    _currentMappings = _episodeService.GetMappingValues();
-                    string oldName = episodeType.FileName;
-                    _currentMappings.TryGetValue(oldName, out newName);
+                    string newName = null;
+                    var oldName = episodeType.FileName;
+                    var matcher = BootStrapper.ResolveAll<ISeriesMatcher>();
+                    foreach (var seriesMatcher in matcher)
+                    {
+                        newName = seriesMatcher.Match(_currentMappings, oldName);
+                        if(!string.IsNullOrEmpty(newName)) break;
+                    }
 
                     episodeType.NewName = newName + " " + episodeType.Season.ToUpper() + 
                                           episodeType.Episode.ToUpper();
-                    string fileType = _selectedFileType.Type;
-                    int found1 = fileType.IndexOf("*");
+                    var fileType = _selectedFileType.Type;
+                    var found1 = fileType.IndexOf("*");
                     episodeType.FileType = fileType.Remove(found1, 1);
                     
                     _newFileList.Add(episodeType);
