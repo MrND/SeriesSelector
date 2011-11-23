@@ -16,10 +16,8 @@
             <WrapPanel>
                 <TextBox Name="SourcePath" Text="{Binding SourcePath}"/>
                 <Button Name="ChooseSourcePath" Command="{Binding SelectFolder}" Content="Choose Folder..."/>
-                <Label Content="File Type"/>
-                <ComboBox ItemsSource="{Binding FileTypes}" DisplayMemberPath="Type" SelectedItem="{Binding SelectedFileType, Mode=TwoWay}"/>
             </WrapPanel>
-            <ListView ItemsSource="{Binding FileList}" DisplayMemberPath="FullPath" SelectedItem="{Binding SelectedFile, Mode=TwoWay}" MaxHeight="650"/>
+            <ListView ItemsSource="{Binding FileList}" DisplayMemberPath="FullPath" SelectedItem="{Binding SelectedFile, Mode=TwoWay}" />
         </StackPanel>
         <StackPanel Grid.Column="1">
             <WrapPanel>
@@ -27,7 +25,7 @@
                 <TextBox Text="{Binding DestinationPath}"/>
                 <Button Command="{Binding SelectDestinationFolder}" Content="Choose Folder..."/>
             </WrapPanel>
-            <ListView ItemsSource="{Binding NewFileList}" DisplayMemberPath="NewName" SelectedItem="{Binding SelectedFile, Mode=TwoWay}" MaxHeight="650"/>
+            <ListView ItemsSource="{Binding NewFileList}" DisplayMemberPath="NewName" SelectedItem="{Binding SelectedFile, Mode=TwoWay}" />
         </StackPanel>
         <StackPanel Grid.Column="2">
             <Label Content="Detailed Information"/>

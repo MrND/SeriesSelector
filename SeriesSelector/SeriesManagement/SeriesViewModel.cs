@@ -96,7 +96,7 @@ namespace SeriesSelector.SeriesManagement
 
         private readonly IEpisdoeService _episodeService;
 
-        private Dictionary<string, string > _currentMappings;
+        private Dictionary<string, string> _currentMappings;
 
         public ICommand AddMapping { get; set; }
 
@@ -108,7 +108,7 @@ namespace SeriesSelector.SeriesManagement
             set
             {
                 _sourcePath = value;
-               
+
             }
         }
 
@@ -125,13 +125,11 @@ namespace SeriesSelector.SeriesManagement
         public void ExecuteSelectFolder(object obj)
         {
             var dlg = new FolderPickerDialog();
-            if (dlg.ShowDialog() == true)
-            {
-                _sourcePath = dlg.SelectedPath;
-                PropertyChanged(this, new PropertyChangedEventArgs("SourcePath"));
-                PropertyChanged(this, new PropertyChangedEventArgs("FileList"));
-                PropertyChanged(this, new PropertyChangedEventArgs("NewFileList"));
-            }
+            if (dlg.ShowDialog() != true) return;
+            _sourcePath = dlg.SelectedPath;
+            PropertyChanged(this, new PropertyChangedEventArgs("SourcePath"));
+            PropertyChanged(this, new PropertyChangedEventArgs("FileList"));
+            PropertyChanged(this, new PropertyChangedEventArgs("NewFileList"));
         }
 
         public ICommand SelectDestinationFolder { get; set; }
@@ -139,11 +137,9 @@ namespace SeriesSelector.SeriesManagement
         private void ExecuteSelectDestinationFolder(object obj)
         {
             var dlg = new FolderPickerDialog();
-            if (dlg.ShowDialog() == true)
-            {
-                _destinationPath = dlg.SelectedPath;
-                PropertyChanged(this, new PropertyChangedEventArgs("DestinationPath"));
-            }
+            if (dlg.ShowDialog() != true) return;
+            _destinationPath = dlg.SelectedPath;
+            PropertyChanged(this, new PropertyChangedEventArgs("DestinationPath"));
         }
 
         public ICommand MoveAllFiles { get; set; }
@@ -151,49 +147,52 @@ namespace SeriesSelector.SeriesManagement
         {
             foreach (var episodeType in _newFileList)
             {
-                string oldPath = episodeType.FullPath;
-                string newName;
-                _currentMappings.TryGetValue(episodeType.FileName, out newName);
-                string newPath = _destinationPath + "\\" + newName + "\\" + episodeType.Season.ToUpper();
+                var oldPath = episodeType.FullPath;
+                var newPath = Path.Combine(_destinationPath, episodeType.SeriesName, episodeType.Season.ToUpper());
 
-                
-                    if (Directory.Exists(newPath))
-                    {
-                        newPath = newPath + "\\" + episodeType.NewName + "." + episodeType.FileType;
-                        if(!File.Exists(newPath))
-                            File.Move(oldPath, newPath);
-                    }
-                    else
-                    {
-                        Directory.CreateDirectory(newPath);
-                        newPath = newPath + "\\" + episodeType.NewName + "." + episodeType.FileType;
+
+                if (Directory.Exists(newPath))
+                {
+                    newPath = Path.Combine(newPath, episodeType.NewName + episodeType.FileType);
+                    if (!File.Exists(newPath))
                         File.Move(oldPath, newPath);
-                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(newPath);
+                    newPath = Path.Combine(newPath, episodeType.NewName + episodeType.FileType);
+                    File.Move(oldPath, newPath);
+                }
             }
+            PropertyChanged(this, new PropertyChangedEventArgs("SourcePath"));
+            PropertyChanged(this, new PropertyChangedEventArgs("FileList"));
+            PropertyChanged(this, new PropertyChangedEventArgs("NewFileList"));
         }
 
         public ICommand MoveSelectedFile { get; set; }
         public void ExecuteMoveSelectedFile(object obj)
         {
             var episodeType = _selectedFile;
-            string oldPath = episodeType.FullPath;
-            string newName;
-            _currentMappings.TryGetValue(episodeType.FileName, out newName);
-            string newPath = _destinationPath + "\\" + newName + "\\" + episodeType.Season.ToUpper();
+            var oldPath = episodeType.FullPath;
+            var newPath = Path.Combine(_destinationPath, episodeType.SeriesName, episodeType.Season.ToUpper());
 
-                if (Directory.Exists(newPath))
-                {
-                    newPath = newPath + "\\" + episodeType.NewName + "." + episodeType.FileType;
+
+            if (Directory.Exists(newPath))
+            {
+                newPath = Path.Combine(newPath, episodeType.NewName + episodeType.FileType);
+                if (!File.Exists(newPath))
                     File.Move(oldPath, newPath);
-                }
-                else
-                {
-                    Directory.CreateDirectory(newPath);
-                    newPath = newPath + "\\" + episodeType.NewName + "." + episodeType.FileType;
-                    File.Move(oldPath, newPath);
-                }
+            }
+            else
+            {
+                Directory.CreateDirectory(newPath);
+                newPath = Path.Combine(newPath, episodeType.NewName + episodeType.FileType);
+                File.Move(oldPath, newPath);
+            }
 
-
+            PropertyChanged(this, new PropertyChangedEventArgs("SourcePath"));
+            PropertyChanged(this, new PropertyChangedEventArgs("FileList"));
+            PropertyChanged(this, new PropertyChangedEventArgs("NewFileList"));
         }
 
         private readonly ObservableCollection<EpisodeType> _newFileList;
@@ -204,7 +203,7 @@ namespace SeriesSelector.SeriesManagement
             {
                 _newFileList.Clear();
                 _currentMappings = _episodeService.GetMappingValues();
-                
+
                 foreach (var episodeType in _fileList)
                 {
                     string newName = null;
@@ -213,15 +212,15 @@ namespace SeriesSelector.SeriesManagement
                     foreach (var seriesMatcher in matcher)
                     {
                         newName = seriesMatcher.Match(_currentMappings, oldName);
-                        if(!string.IsNullOrEmpty(newName)) break;
+                        if (!string.IsNullOrEmpty(newName)) break;
                     }
 
-                    episodeType.NewName = newName + " " + episodeType.Season.ToUpper() + 
+                    episodeType.SeriesName = newName;
+
+                    episodeType.NewName = newName + " " + episodeType.Season.ToUpper() +
                                           episodeType.Episode.ToUpper();
-                    var fileType = _selectedFileType.Type;
-                    var found1 = fileType.IndexOf("*");
-                    episodeType.FileType = fileType.Remove(found1, 1);
-                    
+                    episodeType.FileType = Path.GetExtension(episodeType.FileName);
+
                     _newFileList.Add(episodeType);
                 }
                 return _newFileList;
@@ -311,7 +310,7 @@ namespace SeriesSelector.SeriesManagement
                 }
             }
         }
-        
+
         public Dictionary<string, string> CurrentMappings
         {
             get
@@ -319,7 +318,7 @@ namespace SeriesSelector.SeriesManagement
                 _currentMappings = _episodeService.GetMappingValues();
                 return _currentMappings;
             }
-            
+
         }
     }
 }

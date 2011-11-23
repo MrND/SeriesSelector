@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Data;
@@ -13,11 +14,14 @@ namespace SeriesSelector.Data
     {
         public IList<EpisodeType> GetSourceEpisode(string sourcePath, string fileType)
         {
-            var di = Directory.GetFiles(sourcePath, fileType, SearchOption.AllDirectories);
+            var di = Directory.GetFiles(sourcePath, "*.avi", SearchOption.AllDirectories);
+            var di2 = Directory.GetFiles(sourcePath, "*.mkv", SearchOption.AllDirectories);
+            var l = new ArrayList(di);
+            l.AddRange(di2);
 
             IList<EpisodeType> episode = new List<EpisodeType>();
 
-            foreach (var file in di)
+            foreach (string file in l)
             {
                 var episodeType = new EpisodeType();
                 var fileName = Path.GetFileName(file);

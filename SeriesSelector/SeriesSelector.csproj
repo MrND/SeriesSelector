@@ -102,6 +102,7 @@
     <Compile Include="Data\NameMatcher.cs" />
     <Compile Include="Data\PatternMatcher.cs" />
     <Compile Include="Data\SimpleEpisodeChecker.cs" />
+    <Compile Include="Data\ThreeDigitsEpisodeChecker.cs" />
     <Compile Include="Frame\AdhocCommand.cs" />
     <Compile Include="Frame\Constants.cs" />
     <Compile Include="SeriesManagement\SeriesView.xaml.cs">

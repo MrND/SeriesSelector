@@ -10,5 +10,6 @@ namespace SeriesSelector.Data
         public string FileType { get; set; }
         public string FullPath { get; set; }
         public string NewName { get; set; }
+        public string SeriesName { get; set; }
     }
 }
